@@ -12,6 +12,7 @@ SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 BUTTON_FONT = ("Calibri", 12, "normal")
 reps = 0
+checks = ""
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 
@@ -56,6 +57,10 @@ def countdown(count):
         window.after(1000, countdown, count - 1)
     else:
         start()
+        global checks
+        if reps % 2 == 0:
+            checks += "✔"
+            checkmarks.config(text=checks)
 
 # ---------------------------- UI SETUP ------------------------------- #
 # Window set up
@@ -80,7 +85,7 @@ timer_label = Label(text="Timer", bg=YELLOW, fg=GREEN, font=(FONT_NAME, 24, "bol
 timer_label.grid(column=1, row=0)
 
 # Create checkmarks
-checkmarks = Label(text="✔", bg=YELLOW, fg=GREEN, font=(FONT_NAME, 16, "bold"))
+checkmarks = Label(text=checks, bg=YELLOW, fg=GREEN, font=(FONT_NAME, 16, "bold"))
 checkmarks.grid(column=1, row=3)
 
 # create start button
