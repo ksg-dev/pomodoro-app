@@ -13,12 +13,21 @@ LONG_BREAK_MIN = 20
 BUTTON_FONT = ("Calibri", 12, "normal")
 reps = 0
 checks = ""
+timer = None
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 
 
 def reset():
-    pass
+    global checks, reps
+    # Cancel timer
+    window.after_cancel(timer)
+    # Reset labels and text
+    canvas.itemconfig(timer_text, text="00:00")
+    timer_label.config(text="Timer")
+    checkmarks.config(text="")
+    checks = ""
+    reps = 0
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 
@@ -32,16 +41,16 @@ def start():
     print(reps)
 
     if reps == 8:
-        countdown(LONG_BREAK_MIN)
-        # countdown(long_break_sec)
+        # countdown(LONG_BREAK_MIN)
+        countdown(long_break_sec)
         timer_label.config(text="Long Break", fg=RED)
     elif reps % 2 == 0:
-        countdown(SHORT_BREAK_MIN)
-        # countdown(short_break_sec)
+        # countdown(SHORT_BREAK_MIN)
+        countdown(short_break_sec)
         timer_label.config(text="Short Break", fg=PINK)
     else:
-        countdown(WORK_MIN)
-        # countdown(work_sec)
+        # countdown(WORK_MIN)
+        countdown(work_sec)
         timer_label.config(text="Work!")
 
 
@@ -54,7 +63,8 @@ def countdown(count):
     seconds = count % 60
     canvas.itemconfig(timer_text, text=f"{minute:=02}:{seconds:=02}")
     if count > 0:
-        window.after(1000, countdown, count - 1)
+        global timer
+        timer = window.after(1000, countdown, count - 1)
     else:
         start()
         global checks
