@@ -1,4 +1,6 @@
 from tkinter import *
+import math
+
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
 RED = "#e7305b"
@@ -9,35 +11,57 @@ WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 BUTTON_FONT = ("Calibri", 12, "normal")
+reps = 0
 
 # ---------------------------- TIMER RESET ------------------------------- # 
+
+
 def reset():
     pass
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
+
+
 def start():
-    countdown(5 * 60)
+    global reps
+    work_sec = WORK_MIN * 60
+    short_break_sec = SHORT_BREAK_MIN * 60
+    long_break_sec = LONG_BREAK_MIN * 60
+    reps += 1
+    print(reps)
+
+    if reps == 8:
+        countdown(LONG_BREAK_MIN)
+        # countdown(long_break_sec)
+        timer_label.config(text="Long Break", fg=RED)
+    elif reps % 2 == 0:
+        countdown(SHORT_BREAK_MIN)
+        # countdown(short_break_sec)
+        timer_label.config(text="Short Break", fg=PINK)
+    else:
+        countdown(WORK_MIN)
+        # countdown(work_sec)
+        timer_label.config(text="Work!")
+
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+
+
 def countdown(count):
     # format timer
-    minute = int(count / 60)
-    print(minute)
+    minute = math.floor(count / 60)
     seconds = count % 60
-    print(seconds)
     canvas.itemconfig(timer_text, text=f"{minute:=02}:{seconds:=02}")
     if count > 0:
         window.after(1000, countdown, count - 1)
-
-
+    else:
+        start()
 
 # ---------------------------- UI SETUP ------------------------------- #
-
 # Window set up
 window = Tk()
 window.title("Pomodoro")
 window.config(padx=100, pady=50, bg=YELLOW)
-
 
 # Canvas set up
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
